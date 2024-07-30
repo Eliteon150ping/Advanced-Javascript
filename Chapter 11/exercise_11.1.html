@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Change to Dark Mode</h1>
+    <script>
+        let darkMode = true;
+        window.onclick = () => {
+            let body = document.querySelector("body");
+            if (darkMode) {
+
+                body.style.backgroundColor = "black";
+                body.style.color = "white";
+                darkMode = false
+            } else {
+                body.style.backgroundColor = "white";
+                body.style.color = "black";
+                darkMode = true;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
