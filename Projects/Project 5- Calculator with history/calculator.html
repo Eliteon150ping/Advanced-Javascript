@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Calculator</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Align items to the top */
+            width: 80%;
+        }
+
+        #history-container {
+            margin-right: 20px; /* Add some space between history and calculator */
+        }
+
+        #history-title {
+
+            color: blue;
+            text-decoration: underline;
+            font-size: 2rem;
+            margin-bottom: 10px; /* Add some space below the title */
+        }
+
+        #history {
+            font-size: 1.5rem; /* Reduce font size for history items */
+        }
+
+        #calculator {
+            font-family: Arial, sans-serif;
+            background-color: hsl(340, 57%, 64%);
+            border-radius: 15px;
+            max-width: 500px;
+            overflow: hidden;
+        }
+
+        #display {
+            width: calc(100% - 40px);
+            padding: 20px;
+            font-size: 5rem;
+            text-align: left;
+            border: none;
+            background-color: hsl(340, 57%, 44%);
+            color: white;
+        }
+
+        #keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 25px;
+        }
+
+        button {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            border: none;
+            background-color: turquoise;
+            color: blueviolet;
+            font-size: 3rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: hsl(174, 72%, 40%);
+        }
+
+        button:active {
+            background-color: hsl(174, 72%, 50%);
+        }
+
+        .operator-btn {
+            background-color: hsl(238, 72%, 50%);
+        }
+
+        .operator-btn:hover {
+            background-color: hsl(238, 72%, 30%);
+        }
+
+        .operator-btn:active {
+            background-color: hsl(238, 72%, 40%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="history-container">
+            <div id="history-title">History:</div>
+            <div id="history"></div>
+        </div>
+        <div id="calculator">
+            <input id="display" readonly>
+            <div id="keys">
+                <button onclick="appendToDisplay('+')" class="operator-btn">+</button>
+                <button onclick="appendToDisplay('7')">7</button>
+                <button onclick="appendToDisplay('8')">8</button>
+                <button onclick="appendToDisplay('9')">9</button>
+                <button onclick="appendToDisplay('-')" class="operator-btn">-</button>
+                <button onclick="appendToDisplay('4')">4</button>
+                <button onclick="appendToDisplay('5')">5</button>
+                <button onclick="appendToDisplay('6')">6</button>
+                <button onclick="appendToDisplay('*')" class="operator-btn">*</button>
+                <button onclick="appendToDisplay('1')">1</button>
+                <button onclick="appendToDisplay('2')">2</button>
+                <button onclick="appendToDisplay('3')">3</button>
+                <button onclick="appendToDisplay('/')" class="operator-btn">/</button>
+                <button onclick="appendToDisplay('0')">0</button>
+                <button onclick="appendToDisplay('.')">.</button>
+                <button onclick="calculate()">=</button>
+                <button onclick="clearDisplay()" class="operator-btn">C</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById("display");
+        let history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+        let historyElement = document.getElementById("history");
+
+        function appendToDisplay(input) {
+            display.value += input;
+        }
+
+        function clearDisplay() {
+            display.value = "";
+        }
+
+        function calculate() {
+            try {
+                let expression = display.value;
+                let result = eval(expression);
+                display.value = result;
+                let historyItem = {
+                    expression: expression,
+                    result: result
+                };
+                history.push(historyItem);
+                updateHistory();
+                localStorage.setItem("calcHistory", JSON.stringify(history));
+            } catch (error) {
+                display.value = "Error";
+            }
+        }
+
+        function updateHistory() {
+            historyElement.innerHTML = ""; // Clear the history
+            history.forEach(item => {
+                let historyEntry = document.createElement("div");
+                historyEntry.textContent = item.expression + " = " + item.result;
+                historyElement.appendChild(historyEntry);
+            });
+        }
+
+        // Initialize history display
+        updateHistory();
+    </script>
+</body>
+
+</html>
